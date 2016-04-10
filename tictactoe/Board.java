@@ -12,6 +12,10 @@ public class Board {
                 return this.name();
             }
         }
+
+        public boolean matches(State state2) {
+            return (this == state2 && state2 != BLANK);
+        }
     };
 
     private State[][] squares;  //[column][row]
@@ -62,34 +66,32 @@ public class Board {
 
         //Test columns
         for (int c = 0; winner == null && c < 3; c++) {
-            if (squares[0][c].equals(squares[1][c]) && squares[1][c].equals(squares[2][c])) {
+            if (lineMatches(squares[0][c], squares[1][c], squares[2][c])) {
                 winner = squares[0][c];
             }
         }
 
         //Test rows
         for (int r = 0; winner == null && r < 3; r++) {
-            if (squares[r][0].equals(squares[r][1]) && squares[r][1].equals(squares[r][2])) {
+            if (lineMatches(squares[r][0], squares[r][1], squares[r][2])) {
                 winner = squares[r][0];
             }
         }
 
         //Test diagonals
-        if (winner == null && squares[0][0].equals(squares[1][1])
-                && squares[1][1].equals(squares[2][2]))
+        if (winner == null && lineMatches(squares[0][0], squares[1][1], squares[2][2]))
         {
             winner = squares[0][0];
         }
-        if (winner == null && squares[0][2].equals(squares[1][1])
-                && squares[1][1].equals(squares[2][0]))
+        if (winner == null && lineMatches(squares[0][2], squares[1][1], squares[2][0]))
         {
             winner = squares[0][2];
         }
 
-        if (winner == State.BLANK) {
-            winner = null;
-        }
-
         return winner;
+    }
+
+    private static boolean lineMatches(State cell1, State cell2, State cell3) {
+        return (cell1.matches(cell2) && cell2.matches(cell3));
     }
 }
