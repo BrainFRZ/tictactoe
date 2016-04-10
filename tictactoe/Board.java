@@ -34,14 +34,14 @@ public class Board {
 
 
     public boolean makeTurn(int column, int row) {
-        if (column < 1 || column > 3 || row < 1 || row > 3) {
+        if (column < 0 || column > 2 || row < 0 || row > 2) {
             return false;
         }
 
         if (xTurn) {
-            squares[column - 1][row - 1] = State.X;
+            squares[column][row] = State.X;
         } else {
-            squares[column - 1][row - 1] = State.O;
+            squares[column][row] = State.O;
         }
 
         xTurn = !xTurn;
@@ -58,7 +58,7 @@ public class Board {
     }
 
     public State getCell(int column, int row) {
-        return squares[column-1][row-1];
+        return squares[column][row];
     }
 
     public State verifyWinner() {
