@@ -1,30 +1,14 @@
 package tictactoe;
 
 public class Board {
-    protected static enum State {
-        BLANK, X, O;
 
-        @Override
-        public String toString() {
-            if (this.name().equals("BLANK")) {
-                return " ";
-            } else {
-                return this.name();
-            }
-        }
-
-        public boolean matches(State state2) {
-            return (this == state2 && state2 != BLANK);
-        }
-    };
-
-    private State[][] squares;  //[column][row]
+    private CellState[][] squares;  //[column][row]
     private boolean xTurn;
 
 
     public Board(boolean xFirst) {
         xTurn = xFirst;
-        squares = new State[3][3];
+        squares = new CellState[3][3];
         clearBoard();
     }
 
@@ -39,9 +23,9 @@ public class Board {
         }
 
         if (xTurn) {
-            squares[column][row] = State.X;
+            squares[column][row] = CellState.X;
         } else {
-            squares[column][row] = State.O;
+            squares[column][row] = CellState.O;
         }
 
         xTurn = !xTurn;
@@ -52,29 +36,37 @@ public class Board {
     final public void clearBoard() {
         for (int c = 0; c < 3; c++) {
             for (int r = 0; r < 3; r++) {
-                squares[c][r] = State.BLANK;
+                squares[c][r] = CellState.BLANK;
             }
         }
     }
 
-    public State getCell(int column, int row) {
+    public CellState getCell(int column, int row) {
         return squares[column][row];
     }
 
-    public State verifyWinner() {
-        State winner = null;
+    public CellState getCell(int[] cell) {
+        if (cell.length != 2) {
+            throw new IllegalArgumentException("Cells must have columns and rows.");
+        }
+
+        return getCell(cell[0], cell[1]);
+    }
+
+    public CellState verifyWinner() {
+        CellState winner = null;
 
         //Test columns
-        for (int c = 0; winner == null && c < 3; c++) {
-            if (lineMatches(squares[0][c], squares[1][c], squares[2][c])) {
-                winner = squares[0][c];
+        for (int r = 0; winner == null && r < 3; r++) {
+            if (lineMatches(squares[0][r], squares[1][r], squares[2][r])) {
+                winner = squares[0][r];
             }
         }
 
         //Test rows
-        for (int r = 0; winner == null && r < 3; r++) {
-            if (lineMatches(squares[r][0], squares[r][1], squares[r][2])) {
-                winner = squares[r][0];
+        for (int c = 0; winner == null && c < 3; c++) {
+            if (lineMatches(squares[c][0], squares[c][1], squares[c][2])) {
+                winner = squares[c][0];
             }
         }
 
@@ -91,7 +83,12 @@ public class Board {
         return winner;
     }
 
-    private static boolean lineMatches(State cell1, State cell2, State cell3) {
+    public static int[] intToCell(int cellNumber) {
+        int cell[] = { cellNumber / 3, cellNumber % 3 };
+        return cell;
+    }
+
+    private static boolean lineMatches(CellState cell1, CellState cell2, CellState cell3) {
         return (cell1.matches(cell2) && cell2.matches(cell3));
     }
 }

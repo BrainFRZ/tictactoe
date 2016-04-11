@@ -10,7 +10,7 @@ public class ConsoleGame {
     public static void main(String[] args) {
         int[] move = { 0, 0 };
         AI computer = null;
-        Board.State winner = null;
+        CellState winner = null;
 
         System.out.print("Play against the computer [Y/n]? ");
         String input = scanner.nextLine();
@@ -19,24 +19,24 @@ public class ConsoleGame {
             playComputer = true;
 
             do {
-                System.out.print("Play smart mode or random mode? ");
+                System.out.print("Play easy mode or hard mode? ");
                 input = scanner.nextLine();
 
-                if (input.equalsIgnoreCase("random")) {
-                    computer = new RandomAI();
-                } else if (input.equalsIgnoreCase("smart")) {
-                    computer = new SmartAI();
+                if (input.equalsIgnoreCase("easy")) {
+                    computer = new EasyAI();
+                } else if (input.equalsIgnoreCase("hard")) {
+                    computer = new HardAI();
                 } else {
                     System.out.print("Invalid mode. ");
                 }
-            } while (!input.equalsIgnoreCase("smart") && !input.equalsIgnoreCase("random"));
+            } while (!input.equalsIgnoreCase("easy") && !input.equalsIgnoreCase("hard"));
         }
 
         int turns;
         for (turns = 0; turns < MAX_TURNS && move != null && winner == null; turns++) {
             drawBoard();
             if (turns % 2 == 1 && playComputer) { //Computer goes second
-                move = computer.getMove(board);
+                move = computer.getMove(board, turns);
             } else {
                 move = promptMove(turns);
             }
@@ -45,7 +45,7 @@ public class ConsoleGame {
             } else {
                 board.makeTurn(move[0], move[1]);
                 System.out.println();
-                if (turns >= 3) {
+                if (turns >= 4) {
                     winner = board.verifyWinner();
                 }
             }
@@ -108,7 +108,7 @@ public class ConsoleGame {
 
                     if (cell[0] < 0 || cell[0] > 2 || cell[1] < 0 || cell[1] > 2) {
                         System.out.println("That cell doesn't exist!");
-                    } else if (board.getCell(cell[0], cell[1]) != Board.State.BLANK) {
+                    } else if (board.getCell(cell[0], cell[1]) != CellState.BLANK) {
                         System.out.println("That cell has already been played!");
                     } else {
                         validTurn = true;
