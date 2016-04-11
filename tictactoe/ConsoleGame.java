@@ -40,10 +40,10 @@ public class ConsoleGame {
         int turns;
         int computerTurn = playComputer ? generator.nextInt(2) : -1;
         for (turns = 0; turns < MAX_TURNS && move != null && winner == null; turns++) {
-            drawBoard();
             if (turns % 2 == computerTurn) { //Computer goes second
                 move = computer.getMove(board, turns);
             } else {
+                drawBoard();
                 move = promptMove(turns);
             }
             if (move == null) {
