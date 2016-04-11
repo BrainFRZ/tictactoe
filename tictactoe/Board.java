@@ -1,5 +1,7 @@
 package tictactoe;
 
+import java.util.Arrays;
+
 public class Board {
 
     private CellState[][] squares;  //[column][row]
@@ -34,10 +36,8 @@ public class Board {
     }
 
     final public void clearBoard() {
-        for (int c = 0; c < 3; c++) {
-            for (int r = 0; r < 3; r++) {
-                squares[c][r] = CellState.BLANK;
-            }
+        for (CellState[] row : squares) {
+            Arrays.fill(row, CellState.BLANK);
         }
     }
 
@@ -83,6 +83,11 @@ public class Board {
         return winner;
     }
 
+    /**
+     * Converts an int to a cell. All cell numbers start at 0 and go top to bottom, left to right.
+     * @param cellNumber Cell number to be converted
+     * @return { column, row }
+     */
     public static int[] intToCell(int cellNumber) {
         int cell[] = { cellNumber / 3, cellNumber % 3 };
         return cell;

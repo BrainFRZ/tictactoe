@@ -5,6 +5,13 @@ import java.util.ArrayList;
 public abstract class AI {
     public abstract int[] getMove(Board board, int turns);
 
+    /**
+     * Gets a list of all empty cells remaining on the given board. All cell locations use the
+     * Board's definition of cell numbers, which start at 0 and go top to bottom, left to right.
+     *
+     * @param board Board being used
+     * @return List of empty cells' numbers
+     */
     protected static ArrayList<Integer> getEmptyCells(Board board) {
         ArrayList<Integer> emptyCells = new ArrayList<>(9);
 
@@ -17,6 +24,13 @@ public abstract class AI {
         return emptyCells;
     }
 
+    /**
+     * Predicts if either the computer or player can win in the next move. If X or O can't win,
+     * its value will be null.
+     *
+     * @param board Board being used
+     * @return { winning X cell number, winning O cell number }
+     */
     protected static int[] predictWin(Board board) {
         int[] winner;
         int[] cells = new int[3];
@@ -85,15 +99,14 @@ public abstract class AI {
     }
 
     /**
-     * Returns the cell location of the winning cell and which state would win it as an ordinal.
-     * If there is no winner, null is returned. All cell locations must be a two-element array
-     * with the column then row.
+     * Returns the cell number of the winning cell and which state would win it as an ordinal.
+     * If there is no winner, null is returned.
      *
      * @param board Tic-Tac-Toe Board being played on
-     * @param cell1 Location
-     * @param cell2
-     * @param cell3
-     * @return 3-element array: [CellState winner's ordinal][column][row]
+     * @param cell1 Int location of first cell
+     * @param cell2 Int location of second cell
+     * @param cell3 Int location of third cell
+     * @return { CellState winner's ordinal, cell number }
      */
     private static int[] winsNextTurn(Board board, int cell1, int cell2, int cell3) {
         final int PLAYER = 0, CELL = 1;

@@ -10,58 +10,67 @@ public class ConsoleGame {
     private final static int MAX_TURNS = 9;
 
     public static void main(String[] args) {
-        AI computer = null;
+        String playAgain;
+        do {
+            AI computer = null;
 
-        System.out.print("Play against the computer [Y/n]? ");
-        String input = scanner.nextLine();
-        boolean playComputer = false;
-        if (!input.equalsIgnoreCase("n") && !input.equalsIgnoreCase("no")) {
-            playComputer = true;
+            System.out.print("Play against the computer [Y/n]? ");
+            String input = scanner.nextLine();
+            boolean playComputer = false;
+            if (!input.equalsIgnoreCase("n") && !input.equalsIgnoreCase("no")) {
+                playComputer = true;
 
-            do {
-                System.out.print("Pick game mode [easy | medium | hard]: ");
-                input = scanner.nextLine();
+                do {
+                    System.out.print("Pick game mode [easy | medium | hard]: ");
+                    input = scanner.nextLine();
 
-                if (input.equalsIgnoreCase("easy")) {
-                    computer = new EasyAI();
-                } else if (input.equalsIgnoreCase("medium")) {
-                    computer =  new MediumAI();
-                } else if (input.equalsIgnoreCase("hard")) {
-                    computer = new HardAI();
+                    if (input.equalsIgnoreCase("easy")) {
+                        computer = new EasyAI();
+                    } else if (input.equalsIgnoreCase("medium")) {
+                        computer =  new MediumAI();
+                    } else if (input.equalsIgnoreCase("hard")) {
+                        computer = new HardAI();
+                    } else {
+                        System.out.print("Invalid mode. ");
+                    }
+                } while (!input.equalsIgnoreCase("easy") && !input.equalsIgnoreCase("medium")
+                            && !input.equalsIgnoreCase("hard"));
+            }
+
+            int computerTurn = playComputer ? generator.nextInt(2) : -1;
+            int[] move;
+            CellState winner = null;
+            for (int turns = 0; turns < MAX_TURNS && winner == null; turns++) {
+                if (turns % 2 == computerTurn) { //Computer goes second
+                    move = computer.getMove(board, turns);
                 } else {
-                    System.out.print("Invalid mode. ");
+                    drawBoard();
+                    move = promptMove(turns);
                 }
-            } while (!input.equalsIgnoreCase("easy") && !input.equalsIgnoreCase("medium")
-                        && !input.equalsIgnoreCase("hard"));
-        }
+                if (move == null) {
+                    System.out.println("Thanks for playing!");
+                } else {
+                    board.makeTurn(move[0], move[1]);
+                    System.out.println();
+                    if (turns >= 4) {
+                        winner = board.verifyWinner();
+                    }
+                }
+            }
 
-        int computerTurn = playComputer ? generator.nextInt(2) : -1;
-        int[] move;
-        CellState winner = null;
-        for (int turns = 0; turns < MAX_TURNS && winner == null; turns++) {
-            if (turns % 2 == computerTurn) { //Computer goes second
-                move = computer.getMove(board, turns);
-            } else {
+            if (winner != null) {
                 drawBoard();
-                move = promptMove(turns);
-            }
-            if (move == null) {
-                System.out.println("Thanks for playing!");
+                System.out.println(winner + " won!!");
             } else {
-                board.makeTurn(move[0], move[1]);
-                System.out.println();
-                if (turns >= 4) {
-                    winner = board.verifyWinner();
-                }
+                System.out.println("It was a tie.");
             }
-        }
 
-        if (winner != null) {
-            drawBoard();
-            System.out.println(winner + " won!!");
-        } else {
-            System.out.println("It was a tie.");
-        }
+            System.out.print("Play again [y/N]? ");
+            playAgain = scanner.nextLine();
+            if (playAgain.equalsIgnoreCase("y") || playAgain.equalsIgnoreCase("yes")) {
+                board.clearBoard();
+            }
+        } while (playAgain.equalsIgnoreCase("y") || playAgain.equalsIgnoreCase("yes"));
     }
 
     private static void drawBoard() {
@@ -81,7 +90,7 @@ public class ConsoleGame {
     }
 
     /**
-     * Prompts the user for their turn.
+     * Prompts the user for their move.
      *
      * @param turn Turn number
      * @return Selected cell, or null if user wants to quit
