@@ -1,10 +1,12 @@
 package tictactoe;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class ConsoleGame {
     private final static Board board = new Board();
     private final static Scanner scanner = new Scanner(System.in);
+    private final static Random generator = new Random();
     private final static int MAX_TURNS = 9;
 
     public static void main(String[] args) {
@@ -36,9 +38,10 @@ public class ConsoleGame {
         }
 
         int turns;
+        int computerTurn = playComputer ? generator.nextInt(2) : -1;
         for (turns = 0; turns < MAX_TURNS && move != null && winner == null; turns++) {
             drawBoard();
-            if (turns % 2 == 1 && playComputer) { //Computer goes second
+            if (turns % 2 == computerTurn) { //Computer goes second
                 move = computer.getMove(board, turns);
             } else {
                 move = promptMove(turns);
