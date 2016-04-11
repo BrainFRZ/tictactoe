@@ -19,17 +19,20 @@ public class ConsoleGame {
             playComputer = true;
 
             do {
-                System.out.print("Play easy mode or hard mode? ");
+                System.out.print("Pick game mode [easy | medium | hard]: ");
                 input = scanner.nextLine();
 
                 if (input.equalsIgnoreCase("easy")) {
                     computer = new EasyAI();
+                } else if (input.equalsIgnoreCase("medium")) {
+                    computer =  new MediumAI();
                 } else if (input.equalsIgnoreCase("hard")) {
                     computer = new HardAI();
                 } else {
                     System.out.print("Invalid mode. ");
                 }
-            } while (!input.equalsIgnoreCase("easy") && !input.equalsIgnoreCase("hard"));
+            } while (!input.equalsIgnoreCase("easy") && !input.equalsIgnoreCase("medium")
+                        && !input.equalsIgnoreCase("hard"));
         }
 
         int turns;
