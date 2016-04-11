@@ -10,9 +10,7 @@ public class ConsoleGame {
     private final static int MAX_TURNS = 9;
 
     public static void main(String[] args) {
-        int[] move = { 0, 0 };
         AI computer = null;
-        CellState winner = null;
 
         System.out.print("Play against the computer [Y/n]? ");
         String input = scanner.nextLine();
@@ -37,9 +35,10 @@ public class ConsoleGame {
                         && !input.equalsIgnoreCase("hard"));
         }
 
-        int turns;
         int computerTurn = playComputer ? generator.nextInt(2) : -1;
-        for (turns = 0; turns < MAX_TURNS && move != null && winner == null; turns++) {
+        int[] move;
+        CellState winner = null;
+        for (int turns = 0; turns < MAX_TURNS && winner == null; turns++) {
             if (turns % 2 == computerTurn) { //Computer goes second
                 move = computer.getMove(board, turns);
             } else {
@@ -102,7 +101,7 @@ public class ConsoleGame {
 
             if (input.length < 2) {
                 if (input[0].equalsIgnoreCase("quit")) {
-                    return null;
+                    System.exit(0);
                 } else {
                     System.out.println("Please enter both a column and a row!");
                 }

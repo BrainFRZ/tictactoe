@@ -42,6 +42,6 @@ public class HardAI extends AI {
             }
         }
 
-        return null;
+        throw new IllegalStateException("No move is possible");
     }
 }
