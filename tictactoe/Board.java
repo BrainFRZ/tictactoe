@@ -53,7 +53,7 @@ public class Board {
         return getCell(cell[0], cell[1]);
     }
 
-    public CellState nextTurn() {
+    public CellState nextTurnPlayer() {
         if (xTurn) {
             return CellState.X;
         }
