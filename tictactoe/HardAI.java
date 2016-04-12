@@ -1,10 +1,11 @@
 package tictactoe;
 
-/**
- * Handles a smart AI. At this time, the AI always plays as O, although that will change in a
- * later version.
- */
+import java.util.ArrayList;
+import java.util.Random;
+
 public class HardAI extends AI {
+    private static final Random generator = new Random();
+
     /**
      * Chooses the next move as intelligently as possible. If the center square is open, it will
      * choose it immediately. Thus, the center square will be filled on either turn 0 or 1. Next,
@@ -33,21 +34,29 @@ public class HardAI extends AI {
         }
 
         final int[] corners = { 0, 6, 2, 8 };
-        int[] currentCell;
-        for (int i = 0; i < 4; i++) {
-            currentCell = Board.intToCell(corners[i]);
-            if (board.getCell(currentCell) == CellState.BLANK) {
-                return currentCell;
-            }
+        final ArrayList<Integer> emptyCorners = getEmptyCells(board, corners);
+        if (!emptyCorners.isEmpty()) {
+            return Board.intToCell(emptyCorners.get(generator.nextInt(emptyCorners.size())));
         }
 
-        for (int i = 1; i < 8; i += 2) {
-            currentCell = Board.intToCell(i);
-            if (board.getCell(currentCell) == CellState.BLANK) {
-                return currentCell;
-            }
+        final int[] sides = { 1, 3, 5, 7 };
+        final ArrayList<Integer> emptySides = getEmptyCells(board, sides);
+        if (!emptySides.isEmpty()) {
+            return Board.intToCell(emptySides.get(generator.nextInt(emptySides.size())));
         }
 
         return null;
+    }
+
+    private static ArrayList<Integer> getEmptyCells(Board board, int[] cells) {
+        ArrayList<Integer> list = new ArrayList<>(4);
+
+        for (int i = 0; i < cells.length; i++) {
+            if (board.getCell(i / 3, i % 3) == CellState.BLANK) {
+                list.add(i);
+            }
+        }
+
+        return list;
     }
 }
