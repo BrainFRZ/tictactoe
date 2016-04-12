@@ -53,6 +53,14 @@ public class Board {
         return getCell(cell[0], cell[1]);
     }
 
+    public CellState nextTurn() {
+        if (xTurn) {
+            return CellState.X;
+        }
+
+        return CellState.O;
+    }
+
     public CellState verifyWinner() {
         CellState winner = null;
 

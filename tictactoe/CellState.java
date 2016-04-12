@@ -1,6 +1,6 @@
 package tictactoe;
 
-enum CellState {
+public enum CellState {
     BLANK, X, O;
 
     @Override

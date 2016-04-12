@@ -96,11 +96,7 @@ public class ConsoleGame {
      * @return Selected cell, or null if user wants to quit
      */
     private static int[] promptMove(int turn) {
-        if (turn % 2 == 0) {
-            System.out.println("It's X's turn!");
-        } else {
-            System.out.println("It's O's turn!");
-        }
+        System.out.println("It's " + board.nextTurn() + "'s turn!");
 
         int[] cell = { 0, 0 };
         boolean validTurn = false;
